@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	generator "placeholder-generator"
+	"placeholder-generator"
 	"strconv"
 )
 
@@ -31,6 +31,9 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 
 	heightStr := r.URL.Query().Get("height")
 	widthStr := r.URL.Query().Get("width")
+	colorStr := r.URL.Query().Get("background_color")
+
+	color, err := generator.HexToRGBA(colorStr)
 
 	height, err := strconv.Atoi(heightStr)
 	if err != nil {
@@ -44,7 +47,8 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	generator.Generate(height, width, "static/images/placeholder.png")
+	// Здесь вы можете использовать переменные red, green и blue для установки цвета в функции generator.Generate()
+	generator.Generate(height, width, color, "static/images/placeholder.png")
 	http.ServeFile(w, r, "static/images/placeholder.png")
 }
 
